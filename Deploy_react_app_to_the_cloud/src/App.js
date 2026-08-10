@@ -6,7 +6,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-	<h1>Test of revert</h1>
+	<h1>{process.env.REACT_APP_WEBSITE_PREFIX}Deploy React App</h1>
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
