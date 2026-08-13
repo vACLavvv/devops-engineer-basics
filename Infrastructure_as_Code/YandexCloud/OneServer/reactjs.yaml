@@ -3,7 +3,7 @@
 
   vars:
     project_path: /var/www
-    repositiry: https://gitlab.skillbox.ru/deploy_react_app_to_the_cloud.git
+    repositiry: https://gitlab.skillbox.ru/daniil_antoniuk/devops-engineer-basics.git
 
 
   tasks:
@@ -93,7 +93,7 @@
       args:
         chdir: "{{ release_path }}"
       environment:
-        REACT_APP_WEBSITE_PREFIX: Ansible
+        REACT_APP_WEBSITE_PREFIX: "Daniil Antonyuk"
 
     - name: Update Symlink
       file:
