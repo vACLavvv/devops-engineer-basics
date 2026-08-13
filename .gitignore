@@ -1,0 +1,7 @@
+
+# Terraform local files and secrets
+**/.terraform/
+**/terraform.tfvars
+**/*.tfstate
+**/*.tfstate.*
+**/crash.log
