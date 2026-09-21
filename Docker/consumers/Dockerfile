@@ -15,14 +15,19 @@ ENV UWSGI_CHEAPER 2
 # By default, when on demand, run up to 16 processes
 ENV UWSGI_PROCESSES 16
 
+RUN printf '%s\n' \
+      'deb http://deb.debian.org/debian bullseye main' \
+      > /etc/apt/sources.list \
+    && rm -rf /var/lib/apt/lists/*
+
 # CRON:
 USER root
 ARG INSTALL_CRON=false
-RUN if [ ${INSTALL_CRON} = true ]; then \
-    apt-get update -yqq ; \
-    apt-get -y install cron \
-;fi
-
+RUN if [ "$INSTALL_CRON" = "true" ]; then \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends cron; \
+fi
 # SUPERVISOR:
 USER root
 ARG INSTALL_SUPERVISOR=false

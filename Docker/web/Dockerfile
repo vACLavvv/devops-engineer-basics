@@ -1,5 +1,5 @@
-#FROM
-#USER
+FROM python:3.6
+USER root
 # uWSGI:
 RUN pip install uwsgi
 # Copy the base uWSGI ini file to enable default dynamic uwsgi process number
@@ -10,21 +10,28 @@ ENV UWSGI_INI /etc/uwsgi/uwsgi.ini
 ENV UWSGI_CHEAPER 2
 # By default, when on demand, run up to 16 processes
 ENV UWSGI_PROCESSES 16
+
+RUN printf '%s\n' \
+      'deb http://deb.debian.org/debian bullseye main' \
+      > /etc/apt/sources.list \
+    && rm -rf /var/lib/apt/lists/*
+
 # CRON:
 USER root
 ARG INSTALL_CRON=false
-RUN if [ ${INSTALL_CRON} = true ]; then \
-    apt-get update -yqq ; \
-    apt-get -y install cron \
-;fi
+RUN if [ "$INSTALL_CRON" = "true" ]; then \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends cron; \
+fi
 # SUPERVISOR:
 USER root
 ARG INSTALL_SUPERVISOR=false
-RUN if [ ${INSTALL_SUPERVISOR} = true ]; then \
-    apt-get update -yqq ; \
-    apt-get -y install supervisor \
-;fi
-
+RUN if [ "$INSTALL_SUPERVISOR" = "true" ]; then \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends supervisor; \
+fi
 # NPM:
 USER root
 ARG INSTALL_NPM=false
@@ -72,4 +79,4 @@ ARG WORK_DIR=/var/www
 RUN usermod -u 1000 www-data
 WORKDIR ${WORK_DIR}
 CMD [ "uwsgi" ]
-#PORT
+EXPOSE 9000
